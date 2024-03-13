@@ -36,3 +36,7 @@ services:
     ports:
       - "6385:6379"
     command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  insight:
+    image: redislabs/redisinsight
+    ports:
+      - 5540:5540
