@@ -5,4 +5,8 @@ services:
     image: redis:7-alpine
     ports:
       - 6379:6379
+  insight:
+    image: redislabs/redisinsight
+    ports:
+      - 5540:5540
 
