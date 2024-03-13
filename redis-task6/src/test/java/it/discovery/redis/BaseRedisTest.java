@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class BaseRedisTest {
     @Container
-    static GenericContainer<?> redis = new GenericContainer<>("redis:7-alpine")
+    static protected GenericContainer<?> redis = new GenericContainer<>("redis:7-alpine")
             .withExposedPorts(6379);
 
 }
