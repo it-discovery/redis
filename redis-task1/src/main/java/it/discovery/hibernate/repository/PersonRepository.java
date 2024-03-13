@@ -1,11 +1,9 @@
 package it.discovery.hibernate.repository;
 
 import it.discovery.hibernate.model.Person;
-import it.discovery.hibernate.model.Publisher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
@@ -23,5 +21,5 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
      * @param publisher
      * @return
      */
-    Optional<Person> findMostEfficient(Publisher publisher);
+    //Optional<Person> findMostEfficient(Publisher publisher);
 }
