@@ -24,7 +24,7 @@ public class BookService {
     /**
      * Returns all the books where number of pages is greater than pages parameter
      *
-     * @param name
+     * @param pages
      * @return
      */
     public List<Book> findByPagesGreaterThan(int pages) {

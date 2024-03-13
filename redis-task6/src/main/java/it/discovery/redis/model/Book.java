@@ -1,16 +1,18 @@
 package it.discovery.redis.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Book in a library
  */
 @Getter
 @Setter
+@ToString
 public class Book extends BaseEntity {
     private String nameEn;
 
@@ -20,9 +22,9 @@ public class Book extends BaseEntity {
 
     private Complexity complexity;
 
-    private Person author;
+    private String authorId;
 
-    private Publisher publisher;
+    private String publisherId;
 
     /**
      * Publishing year
