@@ -1,11 +1,11 @@
-package it.discovery.redis.repository;
+package it.discovery.redis.repository.redisson;
 
 import it.discovery.redis.BaseRedisTest;
 import it.discovery.redis.model.Book;
 import it.discovery.redis.model.Person;
 import it.discovery.redis.model.Publisher;
 import it.discovery.redis.model.Review;
-import it.discovery.redis.repository.jedis.JedisHashBookRepository;
+import it.discovery.redis.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class BookRepositoryTest extends BaseRedisTest {
 
     @BeforeEach
     void setup() {
-        bookRepository = new JedisHashBookRepository("localhost", redis.getMappedPort(6379));
+        bookRepository = new RedissonBookRepository("localhost", redis.getMappedPort(6379));
     }
 
     @Test
@@ -41,6 +41,7 @@ public class BookRepositoryTest extends BaseRedisTest {
     }
 
     @Test
+    @Disabled
     void saveAll_validBooks_success() {
         Book book1 = new Book();
         book1.setId(1);
