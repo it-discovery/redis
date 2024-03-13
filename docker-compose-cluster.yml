@@ -1,0 +1,38 @@
+﻿version: '3.8'
+services:
+  redis-1:
+    image: redis:7-alpine
+    container_name: redis1
+    ports:
+      - "6380:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  redis-2:
+    image: redis:7-alpine
+    container_name: redis2
+    ports:
+      - "6381:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  redis-3:
+    image: redis:7-alpine
+    container_name: redis3
+    ports:
+      - "6382:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  redis-4:
+    image: redis:7-alpine
+    container_name: redis4
+    ports:
+      - "6383:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  redis-5:
+    image: redis:7-alpine
+    container_name: redis5
+    ports:
+      - "6384:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
+  redis-6:
+    image: redis:7-alpine
+    container_name: redis6
+    ports:
+      - "6385:6379"
+    command: [ "redis-server","--appendonly yes","--cluster-enabled yes","--cluster-node-timeout 5000" ]
