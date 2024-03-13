@@ -36,7 +36,19 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     @Override
     public Book save(Book book) {
+        Book book1 = getOne(book.getId());
+        if (book1 != null) {
+            if (StringUtils.hasLength(book1.getNameEn())) {
+                jedis.srem(PREFIX_NAME + book1.getNameEn(), STR."\{book.getId()}");
+            }
+            if (StringUtils.hasLength(book1.getNameUk())) {
+                jedis.srem(PREFIX_NAME + book1.getNameUk(), STR."\{book.getId()}");
+            }
+        }
+
         jedis.hset(getKey(book.getId()), bookToMap(book));
+
+
         if (StringUtils.hasLength(book.getNameEn())) {
             jedis.sadd(PREFIX_NAME + book.getNameEn(), STR."\{book.getId()}");
         }

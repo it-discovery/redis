@@ -64,7 +64,10 @@ public class BookRepositoryTest extends BaseRedisTest {
 
         bookRepository.save(book1);
 
-        List<Book> books = bookRepository.findByName("Test");
+        book1.setNameEn("Amazon");
+        bookRepository.save(book1);
+
+        List<Book> books = bookRepository.findByName("NoSQL");
         assertTrue(books.isEmpty());
     }
 
