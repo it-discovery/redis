@@ -6,6 +6,7 @@ import it.discovery.redis.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.NumberUtils;
+import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 import redis.clients.jedis.params.ScanParams;
@@ -14,6 +15,7 @@ import redis.clients.jedis.resps.ScanResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     private final static String PREFIX = "books-hash:";
+
+    private final static String PREFIX_NAME = STR."\{PREFIX}name:";
 
     private final Jedis jedis;
 
@@ -33,6 +37,12 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
     @Override
     public Book save(Book book) {
         jedis.hset(getKey(book.getId()), bookToMap(book));
+        if (StringUtils.hasLength(book.getNameEn())) {
+            jedis.sadd(PREFIX_NAME + book.getNameEn(), STR."\{book.getId()}");
+        }
+        if (StringUtils.hasLength(book.getNameUk())) {
+            jedis.sadd(PREFIX_NAME + book.getNameUk(), STR."\{book.getId()}");
+        }
         return book;
     }
 
@@ -88,7 +98,9 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     @Override
     public List<Book> findByName(String name) {
-        return null;
+        Set<String> keys = jedis.smembers(PREFIX_NAME + name);
+        return keys.stream().map(key -> getOne(NumberUtils.parseNumber(
+                key.replaceAll(PREFIX, ""), Integer.class))).toList();
     }
 
     @Override

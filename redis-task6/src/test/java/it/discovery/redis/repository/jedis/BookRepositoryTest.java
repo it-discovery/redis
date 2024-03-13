@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookRepositoryTest extends BaseRedisTest {
 
@@ -38,6 +37,35 @@ public class BookRepositoryTest extends BaseRedisTest {
         assertNotNull(book);
         assertEquals(book1.getNameEn(), book.getNameEn());
         assertEquals(book1.getAuthorId(), book.getAuthorId());
+    }
+
+    @Test
+    void findByName_bookExists_success() {
+        Book book1 = new Book();
+        book1.setId(1);
+        book1.setNameEn("Redis7");
+        book1.setAuthorId("123");
+        book1.setPublisherId("1");
+
+        bookRepository.save(book1);
+
+        List<Book> books = bookRepository.findByName(book1.getNameEn());
+        assertEquals(1, books.size());
+        assertEquals(book1.getId(), books.getFirst().getId());
+    }
+
+    @Test
+    void findByName_bookNotExist_success() {
+        Book book1 = new Book();
+        book1.setId(100);
+        book1.setNameEn("NoSQL");
+        book1.setAuthorId("123");
+        book1.setPublisherId("1");
+
+        bookRepository.save(book1);
+
+        List<Book> books = bookRepository.findByName("Test");
+        assertTrue(books.isEmpty());
     }
 
     @Test
