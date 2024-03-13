@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.discovery.redis.model.Book;
 import it.discovery.redis.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.NumberUtils;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     private final static String PREFIX = "books-hash:";
@@ -29,15 +32,19 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     @Override
     public Book save(Book book) {
-        Map<String, String> map = mapper.convertValue(book, Map.class);
-        jedis.hset(getKey(book.getId()), map.entrySet().stream().
-                filter(entry -> entry.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        jedis.hset(getKey(book.getId()), bookToMap(book));
         return book;
     }
 
     private String getKey(int id) {
         return PREFIX + id;
+    }
+
+    private Map bookToMap(Book book) {
+        Map<String, String> map = mapper.convertValue(book, Map.class);
+        return map.entrySet().stream().
+                filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
@@ -67,7 +74,16 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     @Override
     public void saveAll(List<Book> books) {
-
+        Transaction transaction = jedis.multi();
+        try {
+            books.stream().map(this::bookToMap)
+                    .forEach(book -> transaction.hset(getKey((Integer) book.get("id")),
+                            book));
+            transaction.exec();
+        } catch (Exception e) {
+            transaction.discard();
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override

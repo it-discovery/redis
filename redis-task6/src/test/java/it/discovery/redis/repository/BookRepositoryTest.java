@@ -26,7 +26,6 @@ public class BookRepositoryTest extends BaseRedisTest {
 
     @Test
     void save_validBook_success() {
-
         Book book1 = new Book();
         book1.setId(1);
         book1.setNameEn("JPA");
@@ -39,6 +38,29 @@ public class BookRepositoryTest extends BaseRedisTest {
         assertNotNull(book);
         assertEquals(book1.getNameEn(), book.getNameEn());
         assertEquals(book1.getAuthorId(), book.getAuthorId());
+    }
+
+    @Test
+    void saveAll_validBooks_success() {
+        Book book1 = new Book();
+        book1.setId(1);
+        book1.setNameEn("Redis");
+        book1.setAuthorId("123");
+        book1.setPublisherId("1");
+
+        Book book2 = new Book();
+        book2.setId(2);
+        book2.setNameEn("NoSQL");
+        book2.setAuthorId("123");
+        book2.setPublisherId("1");
+
+        bookRepository.saveAll(List.of(book1, book2));
+
+        Book book = bookRepository.getOne(book1.getId());
+        assertNotNull(book);
+        Book book3 = bookRepository.getOne(book2.getId());
+        assertNotNull(book3);
+
     }
 
     @Test
