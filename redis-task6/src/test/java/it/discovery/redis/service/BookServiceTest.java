@@ -1,25 +1,33 @@
 package it.discovery.redis.service;
 
+import it.discovery.redis.BaseSpringDataRedisTest;
 import it.discovery.redis.model.Book;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+public class BookServiceTest extends BaseSpringDataRedisTest {
 
-public class BookServiceTest {
-
+    @Autowired
     BookService bookService;
 
     @Test
-    void saveBook_findByName_success() {
+    void saveBook_validObject_success() {
         Book book = new Book();
         book.setNameEn("JPA");
+        book.setId(1);
         bookService.saveBook(book);
 
-        List<Book> books = bookService.findByName("JPA");
-        assertEquals(1, books.size());
-        assertEquals("JPA", books.get(0).getNameEn());
+        Book book1 = bookService.findById(book.getId());
+        assertNotNull(book1);
+        assertEquals("JPA", book1.getNameEn());
+    }
+
+    @Test
+    void findById_identifierInvalid_error() {
+        Book book1 = bookService.findById(100);
+        assertNull(book1);
     }
 
 }
