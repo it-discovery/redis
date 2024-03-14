@@ -20,6 +20,8 @@ public class Book extends BaseEntity {
 
     private String nameUk;
 
+    private List<Translation> translations;
+
     private Complexity complexity;
 
     private String authorId;

@@ -61,10 +61,13 @@ public class BookRepositoryTest extends BaseRedisTest {
         book1.setNameEn("NoSQL");
         book1.setAuthorId("123");
         book1.setPublisherId("1");
+        //book1.setTranslations(List.of(new Translation("NoSQL", "EN")));
 
+        //books-hash:name:NoSQL
         bookRepository.save(book1);
 
         book1.setNameEn("Amazon");
+        //books-hash:name:Amazon
         bookRepository.save(book1);
 
         List<Book> books = bookRepository.findByName("NoSQL");

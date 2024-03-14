@@ -48,8 +48,8 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
         jedis.hset(getKey(book.getId()), bookToMap(book));
 
-
         if (StringUtils.hasLength(book.getNameEn())) {
+            //books-hash:name:Redis
             jedis.sadd(PREFIX_NAME + book.getNameEn(), STR."\{book.getId()}");
         }
         if (StringUtils.hasLength(book.getNameUk())) {
@@ -110,6 +110,7 @@ public class JedisHashBookRepository implements BookRepository, AutoCloseable {
 
     @Override
     public List<Book> findByName(String name) {
+        //books-hash:name:Redis
         Set<String> keys = jedis.smembers(PREFIX_NAME + name);
         return keys.stream().map(key -> getOne(NumberUtils.parseNumber(
                 key.replaceAll(PREFIX, ""), Integer.class))).toList();
