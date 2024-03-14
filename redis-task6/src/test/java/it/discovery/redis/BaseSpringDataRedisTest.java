@@ -17,4 +17,5 @@ public class BaseSpringDataRedisTest {
 //    static void mongoProperties(DynamicPropertyRegistry registry) {
 //        registry.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
 //    }
+
 }
