@@ -33,6 +33,7 @@ class RedisPubSubGlobalLockTest extends BaseRedisTest {
         }
     }
 
+    //TODO add multi-threading tests
     @Test
     void lock_noLockExists_success() {
         globalLock.lock();
