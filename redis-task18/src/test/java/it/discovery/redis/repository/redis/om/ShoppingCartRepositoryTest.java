@@ -29,4 +29,23 @@ class ShoppingCartRepositoryTest extends BaseSpringDataRedisTest {
 
     }
 
+    @Test
+    void findByDiscount_discountExists_success() {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUserId("1234");
+        cart.setBooks(List.of(1, 2));
+        cart.setDiscount(5);
+
+        ShoppingCart cart2 = new ShoppingCart();
+        cart2.setUserId("111");
+        cart2.setDiscount(15);
+
+        shoppingCartRepository.saveAll(List.of(cart, cart2));
+
+        List<ShoppingCart> carts = shoppingCartRepository.findByDiscount(cart.getDiscount());
+        assertEquals(1, carts.size());
+        assertEquals(cart.getUserId(), carts.getFirst().getUserId());
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package it.discovery.redis.model;
 
 import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,6 +19,9 @@ public class ShoppingCart {
     private String userId;
 
     private List<Integer> books;
+
+    @Indexed
+    private int discount;
 
     @CreatedDate
     private LocalDateTime createdAt;
